@@ -1,149 +1,28 @@
-#include<bits/stdc++.h>
-#include <conio.h>
-#include<windows.h>
-using namespace std;
-bool gameOver;
-const int height=20;
-const int width=20;
+Certainly! Let's break down the algorithm step by step:
 
-int x,y,fruitx,fruity,score;
-
-int tailx[100],taily[100],nTail;
-
-enum eDirection {STOP=0,UP,DOWN,LEFT,RIGHT};
-eDirection dir;
-
-void setup(){
-    gameOver=false;
-    dir=STOP;
-    x=width/2;
-    y=height/2;
-    fruitx = rand()% width;
-    fruity = rand()% height;
-}
-
-void Draw(){
-    system("CLS");
-
-    for(int i=0;i<width;i++){
-        cout<<"# ";
-    }
-    cout<<endl;
-
-    for(int i=0;i<height;i++){
-        for(int j=0;j<width;j++){
-            if(j==0 || j==width-1){
-                cout<<"# ";
-            }
-            else if(i==y && j==x)
-                cout<<"O ";
-            else if(i==fruity && j==fruitx)
-                cout<<"F ";
-            else{
-                bool print=false;
-                for(int k=0;k<nTail;k++){
-                    if(i==taily[k] && j==tailx[k]){
-                        cout<<"O";
-                        print = true;
-                    }
-                }
-                if(!print)
-                    cout<<"  ";
-            }
-        }
-        cout<<endl;
-    }
-
-    for(int i=0;i<width;i++){
-        cout<<"# ";
-    }
-    cout<<endl;
-
-    cout<<endl;
-
-    cout<<"Score: "<<score<<endl;
-}
-
-void Input(){
-    if(_kbhit()){
-        switch(_getch()){
-            case 'w':
-                dir=UP;
-                break;
-            case 'a':
-                dir=LEFT;
-                break;
-            case 's':
-                dir=DOWN;
-                break;
-            case 'd':
-                dir=RIGHT;
-                break;
-            default:
-                break;
-        }
-    }
-}
-
-void Logic(){
-    int prevx=tailx[0];
-    int prevy=taily[0];
-    tailx[0]=x;
-    taily[0]=y;
-    int prev2x,prev2y;
-
-    for(int i=1;i<nTail;i++){
-        prev2x=tailx[i];
-        prev2y=taily[i];
-        tailx[i]=prevx;
-        taily[i]=prevy;
-        prevx=prev2x;
-        prevy=prev2y;
-    } 
-
-    switch(dir){
-        case UP:
-            y--;
-            break;
-        case DOWN:
-            y++;
-            break;
-        case LEFT:
-            x--;
-            break;
-        case RIGHT:
-            x++;
-            break;
-        default:
-            break;
-    }
-
-    if(x<0 || x>=width || y<0 || y>=height ){
-        gameOver = true;
-    }
-
-    for(int i=0;i<nTail;i++){
-        if(x==tailx[i] && y==taily[i]){
-            gameOver=true;
-        }
-    }
-
-    if(x==fruitx && y==fruity ) {
-        score+=10;
-        fruitx = rand()% width;
-        fruity = rand()% height;
-        nTail++;
-    }
-}
-
-int main(){
-
-    setup();
-    while(!gameOver){
-        Draw();
-        Input();
-        Logic();
-        Sleep(40);
-    }
-    return 0;
-}
+Initialization (setup()):
+The game initializes by setting the gameOver flag to false.
+The direction (dir) of the snake is set to STOP, indicating that it is not moving initially.
+The initial position of the snake (x and y) is set to the center of the game board.
+The position of the fruit (fruitx and fruity) is randomly generated within the game board.
+Rendering (Draw()):
+The game board is cleared (system("CLS")) to refresh the screen.
+Walls of the game board are drawn using '#' characters.
+The snake's head is drawn at its current position (x and y) using the 'O' character.
+The fruit is drawn at its current position (fruitx and fruity) using the 'F' character.
+The snake's tail is drawn using 'o' characters, based on the positions stored in the tailx and taily arrays.
+The player's score is displayed on the screen.
+Input Handling (Input()):
+The function checks if a key has been pressed using _kbhit().
+If a key has been pressed, it reads the key using _getch() and updates the direction of the snake (dir) accordingly.
+The possible directions are: UP, DOWN, LEFT, and RIGHT.
+Game Logic (Logic()):
+The previous position of the snake's head is stored.
+The snake's head is moved in the direction determined by the dir variable.
+If the snake goes out of bounds (hits the walls), the game ends (gameOver becomes true).
+If the snake collides with its own tail, the game ends.
+If the snake's head overlaps with the fruit, the player's score is increased by 10 points, a new fruit is randomly placed on the board, and the length of the snake's tail (nTail) is incremented.
+Main Loop (main()):
+The game loop continues until gameOver becomes true.
+In each iteration of the loop, the game board is drawn (Draw()), user input is handled (Input()), and game logic is updated (Logic()).
+The Sleep(40) function is used to pause execution for 40 milliseconds, controlling the speed of the game.
